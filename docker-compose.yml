@@ -1,0 +1,16 @@
+version: '3'
+services:
+    php:
+        build: .
+        links:
+            - db:db
+        volumes:
+            - ./:/mnt
+        working_dir: /mnt
+        ports:
+            - 8080:8080
+        tty: true
+
+    db:
+        image: mariadb:10.3.0
+        env_file: .env

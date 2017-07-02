@@ -13,3 +13,4 @@
 /app/Config/database.php
 /vendors/*
 
+.env
