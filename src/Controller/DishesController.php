@@ -53,7 +53,7 @@ class DishesController extends AppController
         $dish = $this->Dishes->newEntity();
         if ($this->request->is('post')) {
             $ext = pathinfo($_FILES['img']['name'])['extension'];
-            $uploadfile = 'dish/' . sha1_file($_FILES['img']['tmp_name']) . '.' . $ext;
+            $uploadfile = sprintf("dish/%s.%s", sha1_file($_FILES['img']['tmp_name']), $ext);
             move_uploaded_file($_FILES['img']['tmp_name'], 'webroot/img/' . $uploadfile);
             $dish = $this->Dishes->patchEntity($dish, $this->request->getData());
             $dish->imgname = $uploadfile;

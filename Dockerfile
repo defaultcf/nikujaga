@@ -5,7 +5,7 @@ RUN apk update && \
     cp /usr/share/zoneinfo/Asia/Tokyo /etc/localtime && \
     apk del tzdata
 
-RUN apk add --no-cache icu-dev && \
+RUN apk add --no-cache make icu-dev && \
     docker-php-ext-install intl && \
     docker-php-ext-install pdo_mysql
 
