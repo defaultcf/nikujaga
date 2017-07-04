@@ -7,9 +7,9 @@ use Cake\Filesystem\Folder;
 use Cake\Filesystem\File;
 
 /**
- * Clear shell command.
+ * Clean shell command.
  */
-class ClearShell extends Shell
+class CleanShell extends Shell
 {
 
     public function initialize()

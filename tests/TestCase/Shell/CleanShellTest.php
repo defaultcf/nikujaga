@@ -1,13 +1,13 @@
 <?php
 namespace App\Test\TestCase\Shell;
 
-use App\Shell\ClearShell;
+use App\Shell\CleanShell;
 use Cake\TestSuite\TestCase;
 
 /**
- * App\Shell\ClearShell Test Case
+ * App\Shell\CleanShell Test Case
  */
-class ClearShellTest extends TestCase
+class CleanShellTest extends TestCase
 {
 
     /**
@@ -20,9 +20,9 @@ class ClearShellTest extends TestCase
     /**
      * Test subject
      *
-     * @var \App\Shell\ClearShell
+     * @var \App\Shell\CleanShell
      */
-    public $Clear;
+    public $Clean;
 
     /**
      * setUp method
@@ -33,7 +33,7 @@ class ClearShellTest extends TestCase
     {
         parent::setUp();
         $this->io = $this->getMockBuilder('Cake\Console\ConsoleIo')->getMock();
-        $this->Clear = new ClearShell($this->io);
+        $this->Clean = new CleanShell($this->io);
     }
 
     /**
@@ -43,7 +43,7 @@ class ClearShellTest extends TestCase
      */
     public function tearDown()
     {
-        unset($this->Clear);
+        unset($this->Clean);
 
         parent::tearDown();
     }
