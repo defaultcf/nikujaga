@@ -52,11 +52,12 @@ class DishesController extends AppController
     {
         $dish = $this->Dishes->newEntity();
         if ($this->request->is('post')) {
-            $ext = pathinfo($_FILES['img']['name'])['extension'];
-            $uploadfile = sprintf("dish/%s.%s", sha1_file($_FILES['img']['tmp_name']), $ext);
-            move_uploaded_file($_FILES['img']['tmp_name'], 'webroot/img/' . $uploadfile);
+            $img = $_FILES['img'] or $this->request->data['img'];
+            $ext = pathinfo($img['name'])['extension'];
+            $imgname = sprintf("dish/%s.%s", sha1_file($img['tmp_name']), $ext);
+            move_uploaded_file($img['tmp_name'], 'webroot/img/' . $imgname);
             $dish = $this->Dishes->patchEntity($dish, $this->request->getData());
-            $dish->imgname = $uploadfile;
+            $dish->imgname = $imgname;
             if ($this->Dishes->save($dish)) {
                 $this->Flash->success(__('The dish has been saved.'));
 
