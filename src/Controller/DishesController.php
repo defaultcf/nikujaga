@@ -2,6 +2,7 @@
 namespace App\Controller;
 
 use App\Controller\AppController;
+use Cake\Network\Exception\InternalErrorException;
 
 /**
  * Dishes Controller
@@ -53,9 +54,16 @@ class DishesController extends AppController
         $dish = $this->Dishes->newEntity();
         if ($this->request->is('post')) {
             $img = $_FILES['img'] or $this->request->data['img'];
-            $ext = pathinfo($img['name'])['extension'];
+            if(! $ext = array_search(
+                mime_content_type($img['tmp_name']),
+                array(
+                    'jpg' => 'image/jpeg',
+                    'png' => 'image/png',
+                ),
+                true
+            )) throw new InternalErrorException(__('非対応のファイル形式'));
             $imgname = sprintf("dish/%s.%s", sha1_file($img['tmp_name']), $ext);
-            move_uploaded_file($img['tmp_name'], 'webroot/img/' . $imgname);
+            move_uploaded_file($img['tmp_name'], WWW_ROOT . 'img/' . $imgname);
             $dish = $this->Dishes->patchEntity($dish, $this->request->getData());
             $dish->imgname = $imgname;
             if ($this->Dishes->save($dish)) {
