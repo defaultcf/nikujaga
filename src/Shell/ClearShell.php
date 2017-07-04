@@ -2,6 +2,9 @@
 namespace App\Shell;
 
 use Cake\Console\Shell;
+use Cake\Datasource\ConnectionManager;
+use Cake\Filesystem\Folder;
+use Cake\Filesystem\File;
 
 /**
  * Clear shell command.
@@ -42,10 +45,17 @@ class ClearShell extends Shell
     {
         if(!$this->params['yes'])
         {
-            $ans = $this->in('Are you sure to clear db?', ['y', 'n'], 'n');
+            $ans = $this->in('Are you sure to clean dishes?', ['y', 'n'], 'n');
             if($ans == 'n') return;
         }
-        $this->out('Clear!');
-        $this->Dishes->deleteAll('1 = 1', false);
+        $connection = ConnectionManager::get('default');
+        $connection->execute('TRUNCATE TABLE dishes');
+
+        $imgdir = new Folder($path = WWW_ROOT . 'img/dish');
+        $imgs = $imgdir->find('.*\.(jpg|png)', false);
+        foreach($imgs as $img) {
+            $file = new File(sprintf("%s/%s", $path, $img));
+            $file->delete();
+        }
     }
 }

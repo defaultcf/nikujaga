@@ -6,4 +6,3 @@ server:
 
 clean:
 	bin/cake clear -y
-	rm -f webroot/img/dish/*
