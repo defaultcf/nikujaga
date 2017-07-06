@@ -121,6 +121,10 @@ class UsersController extends AppController
 
     public function login()
     {
+        if($this->Auth->user('id')) {
+            return $this->redirect(['controller' => 'Dishes', 'action' => 'index']);
+        }
+
         if ($this->request->is('post')) {
             $user = $this->Auth->identify();
             if ($user) {
