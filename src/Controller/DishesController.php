@@ -14,6 +14,10 @@ use Cake\Network\Exception\InternalErrorException;
 class DishesController extends AppController
 {
 
+    public $paginate = [
+        'limit' => 9,
+    ];
+
     /**
      * Index method
      *
@@ -21,7 +25,8 @@ class DishesController extends AppController
      */
     public function index()
     {
-        $dishes = $this->paginate($this->Dishes);
+        $dishes = $this->Dishes->find()->where(['user_id' => $this->Auth->user('id')]);
+        $dishes = $this->paginate($dishes);
 
         $this->set(compact('dishes'));
         $this->set('_serialize', ['dishes']);
@@ -66,6 +71,7 @@ class DishesController extends AppController
             move_uploaded_file($img['tmp_name'], WWW_ROOT . 'img/' . $imgname);
             $dish = $this->Dishes->patchEntity($dish, $this->request->getData());
             $dish->imgname = $imgname;
+            $dish->user_id = $this->Auth->user('id');
             if ($this->Dishes->save($dish)) {
                 $this->Flash->success(__('The dish has been saved.'));
 
