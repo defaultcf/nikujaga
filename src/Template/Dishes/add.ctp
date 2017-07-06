@@ -1,5 +1,13 @@
 <?php
 
+$this->Breadcrumbs->add([
+    ['title' => '料理一覧', 'url' => ['controller' => 'dishes', 'action' => 'index']],
+    ['title' => '追加', 'url' => ['controller' => 'dishes', 'action' => 'add']],
+]);
+echo $this->Breadcrumbs->render(
+    ['class' => 'breadcrumbs']
+);
+
 echo $this->Form->create($dish, [
     'enctype' => 'multipart/form-data',
 ]);
