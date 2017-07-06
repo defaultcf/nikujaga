@@ -49,21 +49,16 @@ class AppController extends Controller
                     'fields' => ['username' => 'email'],
                 ],
             ],
+            'authError' => '権限のあるアカウントでログインしてください',
             'loginRedirect' => [
                 'controller' => 'Dishes',
                 'action' => 'index',
             ],
             'logoutRedirect' => [
-                'controller' => 'Pages',
-                'action' => 'display',
-                'home',
+                'controller' => 'Dishes',
+                'action' => 'index',
             ],
         ]);
-    }
-
-    public function beforeFilter(Event $event)
-    {
-        $this->Auth->allow(['index', 'view', 'display']);
     }
 
         /*

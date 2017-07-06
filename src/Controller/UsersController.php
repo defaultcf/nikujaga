@@ -55,15 +55,20 @@ class UsersController extends AppController
      */
     public function add()
     {
+        if($this->Auth->user('id')) {
+            return $this->redirect(['controller' => 'Dishes', 'action' => 'index']);
+        }
+
         $user = $this->Users->newEntity();
         if ($this->request->is('post')) {
             $user = $this->Users->patchEntity($user, $this->request->getData());
             if ($this->Users->save($user)) {
-                $this->Flash->success(__('The user has been saved.'));
+                $this->Auth->setUser($user->toArray());
+                $this->Flash->success(__('ユーザー登録が完了しました'));
 
-                return $this->redirect(['action' => 'index']);
+                return $this->redirect(['controller' => 'Dishes', 'action' => 'index']);
             }
-            $this->Flash->error(__('The user could not be saved. Please, try again.'));
+            $this->Flash->error(__('ユーザー登録に失敗しました'));
         }
         $this->set(compact('user'));
         $this->set('_serialize', ['user']);
@@ -122,7 +127,7 @@ class UsersController extends AppController
                 $this->Auth->setUser($user);
                 return $this->redirect($this->Auth->redirectUrl());
             }
-            $this->Flash->error(__('Invalid username or password, try again'));
+            $this->Flash->error(__('メールアドレスまたはパスワードが間違っています'));
         }
     }
 
