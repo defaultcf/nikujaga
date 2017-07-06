@@ -50,6 +50,7 @@ class CleanShell extends Shell
         }
         $connection = ConnectionManager::get('default');
         $connection->execute('TRUNCATE TABLE dishes');
+        $connection->execute('TRUNCATE TABLE users');
 
         $imgdir = new Folder($path = WWW_ROOT . 'img/dish');
         $imgs = $imgdir->find('.*\.(jpg|png)', false);
