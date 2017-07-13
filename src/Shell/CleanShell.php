@@ -49,8 +49,10 @@ class CleanShell extends Shell
             if($ans == 'n') return;
         }
         $connection = ConnectionManager::get('default');
+        $connection->execute('SET foreign_key_checks = 0;');
         $connection->execute('TRUNCATE TABLE dishes');
         $connection->execute('TRUNCATE TABLE users');
+        $connection->execute('SET foreign_key_checks = 1;');
 
         $imgdir = new Folder($path = WWW_ROOT . 'img/dish');
         $imgs = $imgdir->find('.*\.(jpg|png)', false);
