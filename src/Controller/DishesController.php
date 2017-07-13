@@ -3,6 +3,7 @@ namespace App\Controller;
 
 use App\Controller\AppController;
 use Cake\Network\Exception\InternalErrorException;
+use Cake\ORM\TableRegistry;
 
 /**
  * Dishes Controller
@@ -41,12 +42,29 @@ class DishesController extends AppController
      */
     public function view($id = null)
     {
+        $commentsTable = TableRegistry::get('comments');
+        $comment = $commentsTable->newEntity();
+        if ($this->request->is('post')) {
+            $comment = $commentsTable->patchEntity($comment, $this->request->getData());
+            $comment->dish_id = $id;
+            $comment->user_id = $this->Auth->user('id');
+            if ($commentsTable->save($comment)) {
+                $this->Flash->success(__('The dish has been saved.'));
+
+                return $this->redirect(['action' => 'index']);
+            }
+            $this->Flash->error(__('The dish could not be saved. Please, try again.'));
+        }
+
         $dish = $this->Dishes->get($id, [
             'contain' => []
         ]);
+        $comments = $commentsTable->find()->where(['dish_id' => $id]);
 
         $this->set('dish', $dish);
-        $this->set('_serialize', ['dish']);
+        $this->set('comment', $comment);
+        $this->set('comments', $comments);
+        $this->set('_serialize', ['dish', 'comment', 'comments']);
     }
 
     /**
