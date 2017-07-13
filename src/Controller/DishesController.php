@@ -26,7 +26,9 @@ class DishesController extends AppController
      */
     public function index()
     {
-        $dishes = $this->Dishes->find()->where(['user_id' => $this->Auth->user('id')]);
+        $dishes = $this->Dishes->find()
+            ->where(['user_id' => $this->Auth->user('id')])
+            ->order(['created' => 'DESC']);
         $dishes = $this->paginate($dishes);
 
         $this->set(compact('dishes'));
@@ -49,17 +51,18 @@ class DishesController extends AppController
             $comment->dish_id = $id;
             $comment->user_id = $this->Auth->user('id');
             if ($commentsTable->save($comment)) {
-                $this->Flash->success(__('The dish has been saved.'));
-
-                return $this->redirect(['action' => 'index']);
+                $this->Flash->success(__('コメントを保存しました'));
+                return $this->redirect(['action' => 'view', $id]);
             }
-            $this->Flash->error(__('The dish could not be saved. Please, try again.'));
+            $this->Flash->error(__('コメントの保存に失敗しました...'));
         }
 
         $dish = $this->Dishes->get($id, [
             'contain' => []
         ]);
-        $comments = $commentsTable->find()->where(['dish_id' => $id]);
+        $comments = $commentsTable->find()
+            ->where(['dish_id' => $id])
+            ->order(['created' => 'DESC']);
 
         $this->set('dish', $dish);
         $this->set('comment', $comment);
@@ -90,12 +93,11 @@ class DishesController extends AppController
             $dish = $this->Dishes->patchEntity($dish, $this->request->getData());
             $dish->imgname = $imgname;
             $dish->user_id = $this->Auth->user('id');
-            if ($this->Dishes->save($dish)) {
-                $this->Flash->success(__('The dish has been saved.'));
-
-                return $this->redirect(['action' => 'index']);
+            if ($newDish = $this->Dishes->save($dish)) {
+                $this->Flash->success(__('料理を保存しました'));
+                return $this->redirect(['action' => 'view', $newDish->id]);
             }
-            $this->Flash->error(__('The dish could not be saved. Please, try again.'));
+            $this->Flash->error(__('料理の保存に失敗しました...'));
         }
         $this->set(compact('dish'));
         $this->set('_serialize', ['dish']);

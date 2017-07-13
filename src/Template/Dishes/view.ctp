@@ -22,5 +22,5 @@ echo $this->Breadcrumbs->render(
 
 <?php foreach($comments as $com): ?>
 <small><?= $com->created ?></small>
-<?= $com->comment ?>
+<p><?= $com->comment ?></p>
 <?php endforeach; ?>
